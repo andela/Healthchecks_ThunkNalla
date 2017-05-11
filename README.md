@@ -1,4 +1,5 @@
-# healthchecks
+# healthchecks <br />[![Build Status](https://travis-ci.org/andela/healthchecks-thunknalla.svg)](https://travis-ci.org/andela/healthchecks-thunknalla) [![Coverage Status](https://coveralls.io/repos/github/andela/healthchecks-thunknalla/badge.svg?branch=develop)](https://coveralls.io/github/andela/healthchecks-thunknalla?branch=develop) [![Code Issues](https://www.quantifiedcode.com/api/v1/project/908ca50d4c1f434392e9039f6aec6932/badge.svg)](https://www.quantifiedcode.com/app/project/908ca50d4c1f434392e9039f6aec6932)
+
 
 ![Screenshot of Welcome page](/stuff/screenshots/welcome.png?raw=true "Welcome Page")
 
