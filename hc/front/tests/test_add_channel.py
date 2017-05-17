@@ -37,5 +37,21 @@ class AddChannelTestCase(BaseTestCase):
             r = self.client.get(url)
             self.assertContains(r, "Integration Settings", status_code=200)
 
-    ### Test that the team access works
-    ### Test that bad kinds don't work
+
+class TeamAccessTestCase(BaseTestCase):
+    # Test that the team access works
+    def test_team_access_works(self):
+        self.channel = Channel(user=self.alice, kind="email")
+        self.channel.value = "test that team access works"
+        self.channel.save()
+
+        url = "/integrations/{}/checks/".format(self.channel.code)
+
+        self.client.login(username="bob@example.org", password="password")
+        self.response = self.client.get(url)
+        self.assertEquals(self.response.status_code, 200)
+
+
+# Test that bad kinds don't work//channels that raise Not implemented error
+class BadKindsTestCase(BaseTestCase):
+    pass
