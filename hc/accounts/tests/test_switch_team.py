@@ -22,7 +22,7 @@ class SwitchTeamTestCase(BaseTestCase):
 
         url = "/accounts/switch_team/%s/" % self.alice.username
         r = self.client.get(url)
-        self.assertEqual(r.status_code, 401)
+        self.assertEqual(r.status_code, 403)
         ###** Assert the expected error code**
 
     def test_it_switches_to_own_team(self):
