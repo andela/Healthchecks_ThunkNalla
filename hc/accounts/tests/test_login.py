@@ -9,7 +9,6 @@ class LoginTestCase(TestCase):
     def test_it_sends_link(self):
         check = Check()
         check.save()
-
         session = self.client.session
         session["welcome_code"] = str(check.code)
         session.save()
@@ -18,9 +17,9 @@ class LoginTestCase(TestCase):
 
         r = self.client.post("/accounts/login/", form)
         assert r.status_code == 302
-
         ### Assert that a user was created
-
+        final_list = len(User.objects.all())
+        self.assertEqual(1, final_list)
         # And email sent
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Log in to healthchecks.io')
@@ -34,4 +33,3 @@ class LoginTestCase(TestCase):
         assert "bad_link" not in self.client.session
 
         ### Any other tests?
-
