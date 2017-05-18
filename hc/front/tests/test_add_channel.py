@@ -1,5 +1,4 @@
 from django.test.utils import override_settings
-
 from hc.api.models import Channel
 from hc.test import BaseTestCase
 
@@ -53,5 +52,35 @@ class TeamAccessTestCase(BaseTestCase):
 
 
 # Test that bad kinds don't work//channels that raise Not implemented error
-class BadKindsTestCase(BaseTestCase):
-    pass
+class BadKindTestCase(BaseTestCase):
+
+    def test_bad_kind(self):
+        self.client.login(username="alice@example.org", password="password")
+        bad_kinds = ('0798885255', 'twitter', 'instagram', 'whatsapp', 'telegram', 'facebook', 'reddit')
+        for any_kind in bad_kinds:
+            url = "/integrations/add_%s/" % any_kind
+            r = self.client.get(url)
+            assert r.status_code == 404
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> origin/ft-testing-bad-kinds-#145028641
