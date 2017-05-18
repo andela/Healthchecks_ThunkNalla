@@ -12,7 +12,7 @@ class SwitchTeamTestCase(BaseTestCase):
 
         url = "/accounts/switch_team/%s/" % self.alice.username
         r= self.client.get(url, follow=True)
-        self.assertIn("healthchecks.io - Monitor Cron Jobs", r.content)
+        self.assertIn("<title>My Checks - healthchecks.io</title>\n", r.content)
         ### **Assert the contents of r **
 
 
