@@ -39,7 +39,7 @@ class AddChannelTestCase(BaseTestCase):
 
 class TeamAccessTestCase(BaseTestCase):
     # Test that the team access works
-    def test_team_access_works_email(self):
+    def test_team_access_works(self):
         kinds = ("email", "webhook", "pd", "pushover", "hipchat", "victorops")
         for kind_name in kinds:
             self.channel = Channel(user=self.alice, kind=kind_name)
