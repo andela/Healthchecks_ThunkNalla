@@ -46,7 +46,7 @@ class AddPushoverTestCase(BaseTestCase):
         session["po_nonce"] = "n"
         session.save()
 
-        priority_list = ['9', '-9', 'a', '#'']
+        priority_list = ['9', '-9', 'a', '#', 9, -9]
         for i in priority_list:
             params = "pushover_user_key=a&nonce=n&prio=%s" % i
             r = self.client.get("/integrations/add_pushover/?%s" % params)
