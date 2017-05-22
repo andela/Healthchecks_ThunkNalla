@@ -23,6 +23,7 @@ class AddPushoverTestCase(BaseTestCase):
     @override_settings(PUSHOVER_API_TOKEN=None)
     def test_it_requires_api_token(self):
         self.client.login(username="alice@example.org", password="password")
+
         r = self.client.get("/integrations/add_pushover/")
         self.assertEqual(r.status_code, 404)
 
@@ -38,3 +39,15 @@ class AddPushoverTestCase(BaseTestCase):
         assert r.status_code == 403
 
     ### Test that pushover validates priority
+    def test_validate_priority(self):
+        self.client.login(username="alice@example.org", password="password")
+
+        session = self.client.session
+        session["po_nonce"] = "n"
+        session.save()
+
+        priority_list = ['9', '-9', 'a', '#'']
+        for i in priority_list:
+            params = "pushover_user_key=a&nonce=n&prio=%s" % i
+            r = self.client.get("/integrations/add_pushover/?%s" % params)
+            self.assertEqual(r.status_code, 400)
