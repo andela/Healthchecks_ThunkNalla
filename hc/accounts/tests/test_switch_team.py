@@ -13,7 +13,7 @@ class SwitchTeamTestCase(BaseTestCase):
         url = "/accounts/switch_team/%s/" % self.alice.username
         r= self.client.get(url, follow=True)
         self.assertIn(str.encode("<title>My Checks - healthchecks.io</title>\n"), r.content)
-        ### **Assert the contents of r **
+        # Assert the contents of r
 
 
     def test_it_checks_team_membership(self):
@@ -22,11 +22,11 @@ class SwitchTeamTestCase(BaseTestCase):
         url = "/accounts/switch_team/{}/".format(self.alice.username)
         r = self.client.get(url)
         self.assertEqual(r.status_code, 403)
-        ###** Assert the expected error code**
+        # Assert the expected error code
 
     def test_it_switches_to_own_team(self):
         self.client.login(username="alice@example.org", password="password")
         url = "/accounts/switch_team/{}/" .format(self.alice.username)
         r = self.client.get(url, follow=True)
         self.assertEqual(r.status_code, 200)
-        ### **Assert the expected error code**
+        # Assert the expected error code**
