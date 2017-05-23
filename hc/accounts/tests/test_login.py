@@ -4,11 +4,10 @@ from hc.test import BaseTestCase
 from hc.api.models import Check
 
 
-
 class LoginTestCase(BaseTestCase):
 
     def test_it_sends_link(self):
-        check = Check()
+        check = Check(user=self.alice)
         check.save()
         session = self.client.session
         session["welcome_code"] = str(check.code)
@@ -28,11 +27,13 @@ class LoginTestCase(BaseTestCase):
         # Assert contents of the email body
         self.assertIn(self.profile.token, mail.outbox[0].body)
 
-
         # ## Assert that check is associated with the new user
         test_user = User.objects.filter(email=form['email'])
-        user_list = Check.objects.get(test_user[0].id)
-        self.assertEqual(test_user.id, user_list)
+        # import ipdb; ipdb.set_trace()
+        user_list = Check.objects.get(id=1)
+        # self.assertEqual(check.get_status("alice@example.org"), "new")
+        # print(user_list.user_id)
+        self.assertEqual(user_list.user_id, test_user[0].id)
 
     def test_it_pops_bad_link_from_session(self):
         self.client.session["bad_link"] = True
