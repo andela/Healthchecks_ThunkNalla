@@ -2,6 +2,7 @@ from collections import Counter
 from datetime import timedelta as td
 from itertools import tee
 
+import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -12,8 +13,6 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.six.moves.urllib.parse import urlencode
-
-import requests
 from hc.api.decorators import uuid_or_400
 from hc.api.models import DEFAULT_GRACE, DEFAULT_TIMEOUT, Channel, Check, Ping
 from hc.front.forms import (AddChannelForm, AddWebhookForm, NameTagsForm,
@@ -331,7 +330,6 @@ def channel_checks(request, code):
         "channel": channel
     }
 
-    print("returned page")
     return render(request, "front/channel_checks.html", ctx)
 
 
