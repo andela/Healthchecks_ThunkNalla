@@ -31,7 +31,6 @@ class LoginTestCase(BaseTestCase):
 
         # ## Assert that check is associated with the new user
         test_user = User.objects.filter(email=form['email'])
-        import ipdb; ipdb.set_trace()
         user_list = Check.objects.get(test_user[0].id)
         self.assertEqual(test_user.id, user_list)
 
