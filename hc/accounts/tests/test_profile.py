@@ -33,7 +33,7 @@ class ProfileTestCase(BaseTestCase):
 
         self.alice.profile.send_report()
 
-        # Assert that the email was sent and check email content #
+        # Assert that the email was sent and check email content
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn("This is a monthly report sent by healthchecks.io.", mail.outbox[0].body)
 
@@ -116,4 +116,14 @@ class ProfileTestCase(BaseTestCase):
         # Expect only Alice's tags
         self.assertNotContains(r, "bobs-tag.svg")
 
-    ### Test it creates and revokes API key
+    # ## Test it creates and revokes API key
+    def test_creates_api_key(self):
+        """Test that it creates api key."""
+        self.client.login(username="alice@example.org", password="password")
+        api_dict = {"create_api_key": "1" }
+        resp = self.client.post("/accounts/profile/", api_dict)
+        self.assertEqual(resp.status_code, 200)
+        self.profile.refresh_from_db()
+        self.assertNotEqual(self.alice.profile.api_key, "abc")
+
+
