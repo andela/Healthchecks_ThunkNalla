@@ -29,10 +29,7 @@ class LoginTestCase(BaseTestCase):
 
         # ## Assert that check is associated with the new user
         test_user = User.objects.filter(email=form['email'])
-        # import ipdb; ipdb.set_trace()
         user_list = Check.objects.get(id=1)
-        # self.assertEqual(check.get_status("alice@example.org"), "new")
-        # print(user_list.user_id)
         self.assertEqual(user_list.user_id, test_user[0].id)
 
     def test_it_pops_bad_link_from_session(self):
