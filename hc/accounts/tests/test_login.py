@@ -13,8 +13,8 @@ class LoginTestCase(BaseTestCase):
         session["welcome_code"] = str(check.code)
         session.save()
         form = {"email": "alice@example.org"}
-        r = self.client.post("/accounts/login/", form)
-        assert r.status_code == 302
+        response = self.client.post("/accounts/login/", form)
+        assert response.status_code == 302
 
         # Assert that a user was created
         final_list = len(User.objects.all())

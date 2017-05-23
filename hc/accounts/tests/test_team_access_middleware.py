@@ -11,9 +11,8 @@ class TeamAccessMiddlewareTestCase(TestCase):
         user.save()
 
         self.client.login(username="ned@example.org", password="password")
-        r = self.client.get("/about/")
-        self.assertEqual(r.status_code, 200)
+        response  = self.client.get("/about/")
+        self.assertEqual(response .status_code, 200)
+        # Assert the new Profile objects count
         number_of_profiles = len(Profile.objects.all())
         self.assertEqual(1, number_of_profiles)
-
-        # Assert the new Profile objects count
