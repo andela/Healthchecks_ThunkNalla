@@ -126,4 +126,13 @@ class ProfileTestCase(BaseTestCase):
         self.profile.refresh_from_db()
         self.assertNotEqual(self.alice.profile.api_key, "abc")
 
+    def test_revokes_api_key(self):
+        """Test that api key is revoked"""
+        self.client.login(username="alice@example.org", password="password")
+        revoke_api_dict = {"revoke_api_key": "1"}
+        resp = self.client.post("/accounts/profile/", revoke_api_dict)
+        self.assertEqual(resp.status_code, 200)
+        self.profile.refresh_from_db()
+        self.assertEqual(self.alice.profile.api_key, "")
+
 
