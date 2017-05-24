@@ -30,8 +30,7 @@ class CheckTokenTestCase(BaseTestCase):
     # Login with a bad token and check that it redirects
     def test_redirects_bad_token(self):
         response = self.client.post("/accounts/check_token/alice/bad-token/")
-        import ipdb; ipdb.set_trace()
         self.assertEqual(response.status_code, 302)
-        #self.assertTrue( response.url.startswith('/accounts/login/') )
+        self.assertTrue(response.url.startswith('/accounts/login/'))
 
     ### Any other tests?
