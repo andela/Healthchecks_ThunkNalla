@@ -115,17 +115,46 @@ class CreateCheckTestCase(BaseTestCase):
         channels = Channel.objects.all()
         data = {
             "api_key": "abc",
-            "name": "Kachulio",
+            "name": "Food",
             "tags": "baz,fizz",
             "timeout": 3600,
             "grace": 60,
             "channels": "*"
         }
-        r = self.client.post(self.URL, json.dumps(data),content_type="application/json")
+        r = self.client.post(self.URL, json.dumps(data), content_type="application/json")
 
         checks = Check.objects.first()
 
         self.assertEqual(checks.channel_set.first().kind, "Telegram")
 
+    def test_timeout_is_to_small(self):
+        data = {
+            "api_key": "abc",
+            "name": "Food",
+            "tags": "baz,fizz",
+            "timeout": -1,
+            "grace": 60,
+            "channels": "*"
+        }
+        r = self.client.post(self.URL, json.dumps(data), content_type="application/json")
 
-    ### Test for the 'timeout is too small' and 'timeout is too large' errors
+        self.assertEqual(r.json()['error'], 'timeout is too small')
+
+
+    def test_timeout_is_to_large(self):
+        data = {
+            "api_key": "abc",
+            "name": "Food",
+            "tags": "baz,fizz",
+            "timeout": 100000000000000000000000000,
+            "grace": 60,
+            "channels": "*"
+        }
+        r = self.client.post(self.URL, json.dumps(data), content_type="application/json")
+
+        self.assertEqual(r.json()['error'],'timeout is too large')
+
+
+
+
+### Test for the 'timeout is too small' and 'timeout is too large' errors
