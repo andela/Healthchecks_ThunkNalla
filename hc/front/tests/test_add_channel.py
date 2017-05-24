@@ -11,9 +11,9 @@ class AddChannelTestCase(BaseTestCase):
         form = {"kind": "email", "value": "alice@example.org"}
 
         self.client.login(username="alice@example.org", password="password")
-        r = self.client.post(url, form)
+        response = self.client.post(url, form)
 
-        self.assertRedirects(r, "/integrations/")
+        self.assertRedirects(response, "/integrations/")
         assert Channel.objects.count() == 1
 
     def test_it_trims_whitespace(self):
@@ -25,21 +25,24 @@ class AddChannelTestCase(BaseTestCase):
         self.client.login(username="alice@example.org", password="password")
         self.client.post(url, form)
 
-        q = Channel.objects.filter(value="alice@example.org")
-        self.assertEqual(q.count(), 1)
+        query_channel_table = Channel.objects.filter(value="alice@example.org")
+        self.assertEqual(query_channel_table.count(), 1)
 
     def test_instructions_work(self):
         self.client.login(username="alice@example.org", password="password")
         kinds = ("email", "webhook", "pd", "pushover", "hipchat", "victorops")
         for frag in kinds:
-            url = "/integrations/add_%s/" % frag
-            r = self.client.get(url)
-            self.assertContains(r, "Integration Settings", status_code=200)
+            url = "/integrations/add_{}/".format(frag)
+            response = self.client.get(url)
+            self.assertContains(response, "Integration Settings",
+                                status_code=200)
 
 
 class TeamAccessTestCase(BaseTestCase):
     # Test that the team access works
     def test_team_access_works(self):
+        self.client.login(username="bob@example.org", password="password")
+
         kinds = ("email", "webhook", "pd", "pushover", "hipchat", "victorops")
         for kind_name in kinds:
             self.channel = Channel(user=self.alice, kind=kind_name)
@@ -48,7 +51,6 @@ class TeamAccessTestCase(BaseTestCase):
 
             url = "/integrations/{}/checks/".format(self.channel.code)
 
-            self.client.login(username="bob@example.org", password="password")
             self.response = self.client.get(url)
             self.assertEquals(self.response.status_code, 200)
 
@@ -60,6 +62,6 @@ class BadKindTestCase(BaseTestCase):
         bad_kinds = ('0798885255', 'twitter', 'instagram', 'whatsapp',
                      'telegram', 'facebook', 'reddit')
         for any_kind in bad_kinds:
-            url = "/integrations/add_%s/" % any_kind
-            r = self.client.get(url)
-            assert r.status_code == 404
+            url = "/integrations/add_{}/".format(any_kind)
+            response = self.client.get(url)
+            self.assertEquals(response.status_code, 404)
