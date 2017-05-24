@@ -146,7 +146,7 @@ class CreateCheckTestCase(BaseTestCase):
             "api_key": "abc",
             "name": "Food",
             "tags": "baz,fizz",
-            "timeout": 100000000000000000000000000,
+            "timeout": 100000000000000,
             "grace": 60,
             "channels": "*"
         }
