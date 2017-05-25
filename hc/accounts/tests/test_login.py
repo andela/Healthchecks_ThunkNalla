@@ -7,18 +7,24 @@ from hc.api.models import Check
 class LoginTestCase(BaseTestCase):
 
     def test_it_sends_link(self):
+        initial_count = len(User.objects.all())
         check = Check(user=self.alice)
         check.save()
+
+
         session = self.client.session
         session["welcome_code"] = str(check.code)
         session.save()
-        form = {"email": "alice@example.org"}
+        form = {"email": "adrian@example.org"}
         response = self.client.post("/accounts/login/", form)
         assert response.status_code == 302
 
         # Assert that a user was created
-        final_list = len(User.objects.all())
-        self.assertEqual(3, final_list)
+        ##use count
+        ##assert user exists
+        user = User.objects.get(email=form["email"])
+        final_count = len(User.objects.all())
+        self.assertEqual(final_count, initial_count+1)
 
         # And email sent
         self.assertEqual(len(mail.outbox), 1)
@@ -28,9 +34,9 @@ class LoginTestCase(BaseTestCase):
         self.assertIn(self.profile.token, mail.outbox[0].body)
 
         # ## Assert that check is associated with the new user
-        test_user = User.objects.filter(email=form['email'])
-        user_list = Check.objects.get(id=1)
-        self.assertEqual(user_list.user_id, test_user[0].id)
+        test_user = User.objects.get(email="alice@example.org")
+        check = Check.objects.get(id=test_user.id)
+        self.assertEqual(check.id, test_user.id)
 
     def test_it_pops_bad_link_from_session(self):
         self.client.session["bad_link"] = True
