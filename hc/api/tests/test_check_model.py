@@ -9,7 +9,7 @@ class CheckModelTestCase(TestCase):
     def test_it_strips_tags(self):
         check = Check()
 
-        check.tags = " foo  bar "
+        check.tags = "foo   bar "
         self.assertEquals(check.tags_list(), ["foo", "bar"])
 
         ### Repeat above test for when check is an empty string
@@ -36,7 +36,6 @@ class CheckModelTestCase(TestCase):
 
         check.status = "paused"
         self.assertFalse(check.in_grace_period())
-
 
     ### Test that when a new check is created, it is not in the grace period
     def test_check_is_not_in_grace_period(self):
