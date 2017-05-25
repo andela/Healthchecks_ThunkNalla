@@ -1,5 +1,4 @@
 from django.core import mail
-
 from hc.test import BaseTestCase
 from hc.accounts.models import Member
 from hc.api.models import Check
@@ -53,7 +52,7 @@ class ProfileTestCase(BaseTestCase):
 
         # Assert that the email was sent and check email content
         self.assertEqual(len(mail.outbox), 1)
-        self.assertIn("{}" .format(settings.SITE_ROOT), mail.outbox[0].body)
+        self.assertIn("{}".format(settings.SITE_ROOT), mail.outbox[0].body)
 
     def test_add_team_member_checks_team_access_allowed_flag(self):
         self.client.login(username="charlie@example.org", password="password")
@@ -120,11 +119,12 @@ class ProfileTestCase(BaseTestCase):
     def test_creates_api_key(self):
         """Test that it creates api key."""
         self.client.login(username="alice@example.org", password="password")
-        api_dict = {"create_api_key": "1" }
+        api_dict = {"create_api_key": "1"}
         response = self.client.post("/accounts/profile/", api_dict)
         self.assertEqual(response.status_code, 200)
         self.profile.refresh_from_db()
         self.assertNotEqual(self.alice.profile.api_key, "abc")
+        self.assertIsNotNone(self.alice.profile.api_key)
 
     def test_revokes_api_key(self):
         """Test that api key is revoked"""
