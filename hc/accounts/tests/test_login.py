@@ -34,6 +34,8 @@ class LoginTestCase(BaseTestCase):
         self.assertIn(self.profile.token, mail.outbox[0].body)
 
         # ## Assert that check is associated with the new user
+        check = Check(user=self.alice)
+        check.save()
         test_user = User.objects.get(email="alice@example.org")
         check = Check.objects.get(id=test_user.id)
         self.assertEqual(check.id, test_user.id)
