@@ -1,3 +1,4 @@
+
 import base64
 import os
 import uuid
@@ -16,8 +17,11 @@ from hc.lib import emails
 class Profile(models.Model):
     # Owner:
     user = models.OneToOneField(User, blank=True, null=True)
+
+    # these two variables can be used to assert team access for users
     team_name = models.CharField(max_length=200, blank=True)
     team_access_allowed = models.BooleanField(default=False)
+
     next_report_date = models.DateTimeField(null=True, blank=True)
     reports_allowed = models.BooleanField(default=True)
     ping_log_limit = models.IntegerField(default=100)
