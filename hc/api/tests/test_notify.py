@@ -9,7 +9,6 @@ from requests.exceptions import ConnectionError, Timeout
 
 
 class NotifyTestCase(BaseTestCase):
-
     def _setup_data(self, kind, value, status="down", email_verified=True):
         self.check = Check()
         self.check.status = status
@@ -60,7 +59,7 @@ class NotifyTestCase(BaseTestCase):
         self.channel.notify(self.check)
 
         url = u"http://host/%s/down/foo/bar/?name=Hello%%20World" \
-            % self.check.code
+              % self.check.code
 
         mock_get.assert_called_with(
             "get", url, headers={"User-Agent": "healthchecks.io"}, timeout=5)
@@ -223,3 +222,19 @@ class NotifyTestCase(BaseTestCase):
         self.assertEqual(json["message_type"], "CRITICAL")
 
     ### Test that the web hooks handle connection errors and error 500s
+    @patch("hc.api.transports.requests.request", side_effect=ConnectionError)
+    def test_web_hook_handle_connection_error(self, mock_post):
+        self._setup_data("webhook", "http://example")
+        self.channel.notify(self.check)
+        n = Notification.objects.get()
+        self.assertEqual(n.error, "Connection failed")
+
+    @patch("hc.api.transports.requests.request")
+    def test_web_hook_handles_500(self, mock_post):
+        self._setup_data("webhook", "twende home")
+        mock_post.return_value.status_code = 500
+
+        self.channel.notify(self.check)
+
+        n = Notification.objects.get()
+        self.assertEqual(n.error, "Received status code 500")
