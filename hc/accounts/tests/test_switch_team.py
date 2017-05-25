@@ -13,7 +13,9 @@ class SwitchTeamTestCase(BaseTestCase):
         url = "/accounts/switch_team/%s/" % self.alice.username
         response= self.client.get(url, follow=True)
         # Assert the contents of response
+        #assertHtml
         self.assertIn(str.encode("<title>My Checks - healthchecks.io</title>\n"), response.content)
+        self.assertContains(response,"<title>My Checks - healthchecks.io</title>", html=True)
 
     def test_it_checks_team_membership(self):
         self.client.login(username="charlie@example.org", password="password")
