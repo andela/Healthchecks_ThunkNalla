@@ -10,19 +10,31 @@ class CheckTokenTestCase(BaseTestCase):
         self.profile.save()
 
     def test_it_shows_form(self):
-        r = self.client.get("/accounts/check_token/alice/secret-token/")
-        self.assertContains(r, "You are about to log in")
+        response = self.client.get("/accounts/check_token/alice/secret-token/")
+        self.assertContains(response, "You are about to log in")
 
     def test_it_redirects(self):
-        r = self.client.post("/accounts/check_token/alice/secret-token/")
-        self.assertRedirects(r, "/checks/")
+        response = self.client.post("/accounts/check_token/alice/secret-token/")
+        self.assertRedirects(response, "/checks/")
 
         # After login, token should be blank
         self.profile.refresh_from_db()
         self.assertEqual(self.profile.token, "")
 
-    ### Login and test it redirects already logged in
+    # Login and test it redirects already logged in
+    def test_it_redirects_already_logged_in(self):
+        self.client.login(username="alice@example.org", password="password")
+        response = self.client.post("/accounts/check_token/alice/secret-token/")
+        self.assertEqual(response.status_code, 302)
 
-    ### Login with a bad token and check that it redirects
+    # Login with a bad token and check that it redirects
+    #login  with bad token
+    def test_redirects_bad_token(self):
+        self.client.login(username="alice@example.org", password="password")
+        response = self.client.post("/accounts/check_token/alice/bad-token/")
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, "/checks/")
+
+
 
     ### Any other tests?
