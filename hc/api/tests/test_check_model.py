@@ -6,13 +6,15 @@ from hc.api.models import Check
 
 
 class CheckModelTestCase(TestCase):
-
     def test_it_strips_tags(self):
         check = Check()
 
-        check.tags = " foo  bar "
+        check.tags = "foo   bar "
         self.assertEquals(check.tags_list(), ["foo", "bar"])
+
         ### Repeat above test for when check is an empty string
+        check.tags = ""
+        self.assertEqual(check.tags_list(), [])
 
     def test_status_works_with_grace_period(self):
         check = Check()
@@ -36,3 +38,8 @@ class CheckModelTestCase(TestCase):
         self.assertFalse(check.in_grace_period())
 
     ### Test that when a new check is created, it is not in the grace period
+    def test_check_is_not_in_grace_period(self):
+        check = Check()
+        check.last_ping = timezone.now() - timedelta(days=1, minutes=30)
+        check.status = "up"
+        self.assertTrue(check.in_grace_period())
