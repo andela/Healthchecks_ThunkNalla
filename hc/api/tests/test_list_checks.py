@@ -1,7 +1,6 @@
-import json
 from datetime import timedelta as td
 from django.utils.timezone import now
-from django.conf import settings
+
 
 from hc.api.models import Check
 from hc.test import BaseTestCase
