@@ -35,8 +35,6 @@ class SendAlertsTestCase(BaseTestCase):
         # 1 day 30 minutes after ping the check is in grace period:
         check.last_ping = timezone.now() - timedelta(days=1, minutes=30)
         check.save()
-        all_checks = Check.objects.all()
-        print(all_checks)
         # Expect no exceptions--
         Command().handle_one(check)
 
