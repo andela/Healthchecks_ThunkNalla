@@ -8,7 +8,7 @@ class LoginTestCase(BaseTestCase):
 
     def test_it_sends_link(self):
         initial_count = len(User.objects.all())
-        check = Check(user=self.alice)
+        check = Check()
         check.save()
 
 
@@ -34,11 +34,11 @@ class LoginTestCase(BaseTestCase):
         self.assertIn(self.profile.token, mail.outbox[0].body)
 
         # ## Assert that check is associated with the new user
+    def test_check_is_associated_with_new_user(self):
+        test_user = User.objects.get(email="alice@example.org")
         check = Check(user=self.alice)
         check.save()
-        test_user = User.objects.get(email="alice@example.org")
-        check = Check.objects.get(id=test_user.id)
-        self.assertEqual(check.id, test_user.id)
+        self.assertEqual(check.user.id, test_user.id)
 
     def test_it_pops_bad_link_from_session(self):
         self.client.session["bad_link"] = True
