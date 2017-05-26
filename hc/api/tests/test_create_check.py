@@ -49,13 +49,6 @@ class CreateCheckTestCase(BaseTestCase):
         self.assertEqual(check.grace.total_seconds(), 60)
 
     def test_it_accepts_api_key_in_header(self):
-        # r = self.post({
-        #     "api_key": "abc",
-        #     "name": "Foo",
-        #     "tags": "bar,baz",
-        #     "timeout": 3600,
-        #     "grace": 60
-        # })
 
         data = {
             "name": "Foo",
