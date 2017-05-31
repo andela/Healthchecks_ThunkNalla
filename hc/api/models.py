@@ -21,7 +21,7 @@ STATUSES = (
 )
 DEFAULT_TIMEOUT = td(days=1)
 DEFAULT_GRACE = td(hours=1)
-CHANNEL_KINDS = (("email", "Email"), ("webhook", "Webhook"),
+CHANNEL_KINDS = (("sms", "SMS"), ("email", "Email"), ("webhook", "Webhook"),
                  ("hipchat", "HipChat"),
                  ("slack", "Slack"), ("pd", "PagerDuty"), ("po", "Pushover"),
                  ("victorops", "VictorOps"))
@@ -167,6 +167,8 @@ class Channel(models.Model):
 
     @property
     def transport(self):
+        if self.kind == 'sms':
+            return transports.SMS(self)
         if self.kind == "email":
             return transports.Email(self)
         elif self.kind == "webhook":

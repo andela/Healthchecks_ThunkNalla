@@ -35,9 +35,10 @@ INSTALLED_APPS = (
     'djmail',
 
     'hc.accounts',
+    'django_twilio',
     'hc.api',
     'hc.front',
-    'hc.payments'
+    'hc.payments',
 )
 
 MIDDLEWARE = (
@@ -138,6 +139,10 @@ EMAIL_BACKEND = "djmail.backends.default.EmailBackend"
 # Slack integration -- override these in local_settings
 SLACK_CLIENT_ID = None
 SLACK_CLIENT_SECRET = None
+
+# sms integration
+TWILIO_ACCOUNT_SID = 'ACacce7eab5f5f5018d1c78ba0bfc36aa7'
+TWILIO_AUTH_TOKEN = '4b813e4109fe5f91e91568d202de0463'
 
 # Pushover integration -- override these in local_settings
 PUSHOVER_API_TOKEN = None
