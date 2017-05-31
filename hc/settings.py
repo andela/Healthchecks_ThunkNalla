@@ -84,21 +84,15 @@ TEST_RUNNER = 'hc.api.tests.CustomRunner'
 # Default database engine is SQLite. So one can just check out code,
 # install requirements.txt and do manage.py runserver and it works
 if os.environ.get("PLATFORM") == "HEROKU":
-    databse_url = os.environ.get("DATABASE_URL")
+    default = dj_database_url.config(conn_max_age=600)
     DATABASES = {
-        'default': dj_database_url.config(default=databse_url)
+        'default': dj_database_url.config(default=default)
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME':   './hc.sqlite',
-        }
-    }
+    STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 # You can switch database engine to postgres or mysql using environment
 # variable 'DB'. Travis CI does this.
-if os.environ.get("DB") == "postgres":
+elif os.environ.get("DB") == "postgres":
     DATABASES = {
         'default': {
             'ENGINE':   'django.db.backends.postgresql',
@@ -108,13 +102,20 @@ if os.environ.get("DB") == "postgres":
         }
     }
 
-if os.environ.get("DB") == "mysql":
+elif os.environ.get("DB") == "mysql":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'USER':     'root',
             'NAME':     'hc',
             'TEST': {'CHARSET': 'UTF8'}
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME':   './hc.sqlite',
         }
     }
 
