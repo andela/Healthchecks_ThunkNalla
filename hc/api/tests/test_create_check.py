@@ -128,6 +128,7 @@ class CreateCheckTestCase(BaseTestCase):
         self.assertEqual(r.json()['error'], 'timeout is too small')
 
     def test_timeout_is_to_large(self):
+        # might fail after update change this
         data = {
             "api_key": "abc",
             "name": "Food",

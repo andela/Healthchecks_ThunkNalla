@@ -20,6 +20,9 @@ class NameTagsForm(forms.Form):
 class TimeoutForm(forms.Form):
     timeout = forms.IntegerField(min_value=60, max_value=2592000)
     grace = forms.IntegerField(min_value=60, max_value=2592000)
+    # change 365 days
+    # max_value is in seconds change so calculate value of seconds in a year
+    
 
 
 class AddChannelForm(forms.ModelForm):

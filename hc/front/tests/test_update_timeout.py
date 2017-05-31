@@ -57,3 +57,4 @@ class UpdateTimeoutTestCase(BaseTestCase):
         self.client.login(username="charlie@example.org", password="password")
         r = self.client.post(url, data=payload)
         assert r.status_code == 403
+    # test can update time out to large than 30

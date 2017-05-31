@@ -4,7 +4,9 @@ $(function () {
     var HOUR = {name: "hour", nsecs: MINUTE.nsecs * 60};
     var DAY = {name: "day", nsecs: HOUR.nsecs * 24};
     var WEEK = {name: "week", nsecs: DAY.nsecs * 7};
-    var UNITS = [WEEK, DAY, HOUR, MINUTE];
+    var MONTH = {name: "month", nsecs: WEEK.nsecs * 4};
+    var UNITS = [MONTH, WEEK, DAY, HOUR, MINUTE];
+    //add the various units e.g month, year ...centuary
 
     var secsToText = function(total) {
         var remainingSeconds = Math.floor(total);
@@ -40,10 +42,14 @@ $(function () {
             '66%': [86400, 86400],
             '83%': [604800, 604800],
             'max': 2592000,
+
+            //update the appropriate steps and intervals
+            // ypdate the max va
         },
         pips: {
             mode: 'values',
             values: [60, 1800, 3600, 43200, 86400, 604800, 2592000],
+            // values that apper on slider should be updated to reflect new intervals
             density: 4,
             format: {
                 to: secsToText,
@@ -69,9 +75,13 @@ $(function () {
             '66%': [86400, 86400],
             '83%': [604800, 604800],
             'max': 2592000,
+
+            //update the appropriate steps and intervals
+            // ypdate the max va
         },
         pips: {
             mode: 'values',
+            // values that apper on slider should be updated to reflect new intervals
             values: [60, 1800, 3600, 43200, 86400, 604800, 2592000],
             density: 4,
             format: {
