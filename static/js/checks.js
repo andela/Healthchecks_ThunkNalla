@@ -1,11 +1,13 @@
 $(function () {
 
-    var MINUTE = {name: "minute", nsecs: 60};
-    var HOUR = {name: "hour", nsecs: MINUTE.nsecs * 60};
+    var SECONDS = {name: "sec", nsecs: 1};
+    var MINUTE = {name: "min", nsecs: 60};
+    var HOUR = {name: "hr", nsecs: MINUTE.nsecs * 60};
     var DAY = {name: "day", nsecs: HOUR.nsecs * 24};
     var WEEK = {name: "week", nsecs: DAY.nsecs * 7};
-    var MONTH = {name: "month", nsecs: WEEK.nsecs * 4};
-    var UNITS = [MONTH, WEEK, DAY, HOUR, MINUTE];
+    var MONTH = {name: "month", nsecs: DAY.nsecs * 30};
+    var YEAR = {name: "year", nsecs: MONTH.nsecs * 12};
+    var UNITS = [YEAR, MONTH, WEEK, DAY, HOUR, MINUTE, SECONDS];
     //add the various units e.g month, year ...centuary
 
     var secsToText = function(total) {
@@ -14,7 +16,7 @@ $(function () {
         for (var i=0, unit; unit=UNITS[i]; i++) {
             if (unit === WEEK && remainingSeconds % unit.nsecs != 0) {
                 // Say "8 days" instead of "1 week 1 day"
-                continue
+                continue;
             }
 
             var count = Math.floor(remainingSeconds / unit.nsecs);
@@ -32,32 +34,39 @@ $(function () {
         return result;
     }
 
-    var periodSlider = document.getElementById("period-slider");
-    noUiSlider.create(periodSlider, {
-        start: [20],
-        connect: "lower",
-        range: {
-            'min': [60, 60],
-            '33%': [3600, 3600],
-            '66%': [86400, 86400],
-            '83%': [604800, 604800],
-            'max': 2592000,
+    function create_slider(tag_name) {
+        let max_step = 60
+        let min_step = 1
+        noUiSlider.create(tag_name, {
+            start: [20],
+            connect: "lower",
+            range: {
+                'min': [MINUTE.nsecs, max_step],
+                '10%': [HOUR.nsecs, max_step],
+                '25%': [DAY.nsecs, max_step],
+                '45%': [WEEK.nsecs, max_step],
+                '60%': [MONTH.nsecs, max_step * max_step],
+                'max': YEAR.nsecs
 
-            //update the appropriate steps and intervals
-            // ypdate the max va
-        },
-        pips: {
-            mode: 'values',
-            values: [60, 1800, 3600, 43200, 86400, 604800, 2592000],
-            // values that apper on slider should be updated to reflect new intervals
-            density: 4,
-            format: {
-                to: secsToText,
-                from: function() {}
+                //update the appropriate steps and intervals
+                // ypdate the max va
+            },
+            pips: {
+                mode: 'values',
+                values: [MINUTE.nsecs, HOUR.nsecs, DAY.nsecs, WEEK.nsecs, MONTH.nsecs, YEAR.nsecs / 2,YEAR.nsecs],
+                // values that apper on slider should be updated to reflect new intervals
+                density: 4,
+                format: {
+                    to: secsToText,
+                    from: function() {}
+                }
             }
-        }
-    });
+        });
+    }
 
+
+    var periodSlider = document.getElementById("period-slider");
+    create_slider(periodSlider)
     periodSlider.noUiSlider.on("update", function(a, b, value) {
         var rounded = Math.round(value);
         $("#period-slider-value").text(secsToText(rounded));
@@ -66,31 +75,7 @@ $(function () {
 
 
     var graceSlider = document.getElementById("grace-slider");
-    noUiSlider.create(graceSlider, {
-        start: [20],
-        connect: "lower",
-        range: {
-            'min': [60, 60],
-            '33%': [3600, 3600],
-            '66%': [86400, 86400],
-            '83%': [604800, 604800],
-            'max': 2592000,
-
-            //update the appropriate steps and intervals
-            // ypdate the max va
-        },
-        pips: {
-            mode: 'values',
-            // values that apper on slider should be updated to reflect new intervals
-            values: [60, 1800, 3600, 43200, 86400, 604800, 2592000],
-            density: 4,
-            format: {
-                to: secsToText,
-                from: function() {}
-            }
-        }
-    });
-
+    create_slider(graceSlider)
     graceSlider.noUiSlider.on("update", function(a, b, value) {
         var rounded = Math.round(value);
         $("#grace-slider-value").text(secsToText(rounded));
