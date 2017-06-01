@@ -36,7 +36,7 @@ class SendAlertsTestCase(BaseTestCase):
         # 1 day 30 minutes after ping the check is in grace period:
         check.last_ping = timezone.now() - timedelta(days=1, minutes=30)
         check.save()
-        
+
         # Expect no exceptions--
         failed = False
         try:
@@ -51,7 +51,7 @@ class SendAlertsTestCase(BaseTestCase):
     @patch("hc.api.management.commands.sendalerts.Command.handle_many")
     def test_it_handles_many(self, mock):
         yesterday = timezone.now() - timedelta(days=1)
-        names = ["Check %d" % d for d in range(0, 10000)]
+        names = ["Check %d" % d for d in range(0, 100)]
 
         for name in names:
             check = Check(user=self.alice, name=name)
