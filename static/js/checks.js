@@ -41,8 +41,8 @@ $(function () {
             start: [20],
             connect: "lower",
             range: {
-                'min': [MINUTE.nsecs, max_step],
-                '10%': [HOUR.nsecs, max_step],
+                'min': [MINUTE.nsecs, min_step],
+                '10%': [HOUR.nsecs, min_step],
                 '25%': [DAY.nsecs, max_step],
                 '45%': [WEEK.nsecs, max_step],
                 '60%': [MONTH.nsecs, max_step * max_step],
