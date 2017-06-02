@@ -95,10 +95,9 @@ class SMS(Transport):
     def notify(self, check):
         if check.status in ["up", "down"]:
             message = "Hullo, your {} check is {}!".format(check.name, check.status)
-            for value in self.channel.value:
-                to = value
-                client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-                response = client.messages.create(body=message, to=to, from_='(256) 998-9594')
+            to = self.channel.value
+            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+            response = client.messages.create(body=message, to=to, from_='+12569989594')
 
             if response.error_message:
                 return response.error_message
