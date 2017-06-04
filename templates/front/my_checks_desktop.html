@@ -22,7 +22,7 @@
                     data-toggle="tooltip" title="Monitoring paused. Ping to resume."></span>
             {% elif check.get_status == "often" %}
                 <span class="status icon-often" data-toggle="tooltip"
-                  title="Ping is running too often."></span>
+                  title="Ping is up but running too often."></span>
             {% elif check.in_grace_period %}
                 <span class="status icon-grace"></span>
             {% elif check.get_status == "up" %}

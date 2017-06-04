@@ -57,7 +57,7 @@ class ListChecksTestCase(BaseTestCase):
         self.assertEqual(checks['Alice 2']['timeout'], 86400)
         self.assertEqual(checks['Alice 2']['grace'], 3600)
         self.assertEqual(checks['Alice 2']['ping_url'], self.a2.to_dict()['ping_url'])
-        self.assertEqual(checks['Alice 2']['status'], "up")
+        self.assertEqual(checks['Alice 2']['status'], "often")
         self.assertEqual(checks['Alice 2']['last_ping'], self.a2.to_dict()['last_ping'])
         self.assertEqual(checks['Alice 2']['n_pings'], self.a2.to_dict()['n_pings'])
         self.assertEqual(checks['Alice 2']['pause_url'], self.a2.to_dict()['pause_url'])

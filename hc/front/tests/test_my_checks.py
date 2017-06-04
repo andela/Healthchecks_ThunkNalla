@@ -26,10 +26,10 @@ class MyChecksTestCase(BaseTestCase):
         r = self.client.get("/checks/")
 
         # Desktop
-        self.assertContains(r, "icon-up")
+        self.assertContains(r, "icon-often")
 
         # Mobile
-        self.assertContains(r, "label-success")
+        self.assertContains(r, "label-warning")
 
     def test_it_shows_red_check(self):
         self.check.last_ping = timezone.now() - td(days=3)
