@@ -36,7 +36,6 @@ class SendAlertsTestCase(BaseTestCase):
         # 1 day 30 minutes after ping the check is in grace period:
         check.last_ping = timezone.now() - timedelta(days=1, minutes=30)
         check.save()
-
         # Expect no exceptions--
         failed = False
         try:
@@ -47,4 +46,3 @@ class SendAlertsTestCase(BaseTestCase):
         self.assertFalse(failed)
 
     # Assert when Command's handle many that when handle_many should return
-    # True
