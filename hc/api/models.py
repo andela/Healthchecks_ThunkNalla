@@ -17,7 +17,8 @@ STATUSES = (
     ("up", "Up"),
     ("down", "Down"),
     ("new", "New"),
-    ("paused", "Paused")
+    ("paused", "Paused"),
+    ("often", "Often")
 )
 DEFAULT_TIMEOUT = td(days=1)
 DEFAULT_GRACE = td(hours=1)
@@ -85,9 +86,15 @@ class Check(models.Model):
             return self.status
 
         now = timezone.now()
-
-        if self.last_ping + self.timeout/6 > now:
-            return "often"
+        if len(self.ping_set.all().order_by('-created')) > 2:
+            reversed_grace = (self.timeout/6)
+            pings_to_check = self.ping_set.all().order_by('-created')
+            previous_ping = pings_to_check[1].created
+            if self.last_ping + self.timeout + self.grace > now:
+                if (self.last_ping - previous_ping) - reversed_grace < self.timeout:
+                    return "often"
+                else:
+                    return "up"
 
         if self.last_ping + self.timeout + self.grace > now:
             return "up"
@@ -95,7 +102,7 @@ class Check(models.Model):
         return "down"
 
     def in_grace_period(self):
-        if self.status in ("new", "paused", "often"):
+        if self.status in ("new", "paused"):
             return False
 
         up_ends = self.last_ping + self.timeout
