@@ -38,6 +38,18 @@
                     {% endif %}
                 </td>
             </tr>
+            <tr>
+                <th>Priority</th>
+                    <td>
+                    <select>
+                        <option value="lowest">Lowest</option>
+                        <option value="low">Low</option>
+                        <option value="normal">Normal</option>
+                        <option value="high">High</option>
+                        <option value="emergency">Emergency</option>
+                    </select>
+                    </td>
+            </tr>
             {% if check.tags %}
             <tr>
                 <th>Tags</th>
