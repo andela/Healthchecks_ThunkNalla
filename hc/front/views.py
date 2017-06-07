@@ -358,6 +358,10 @@ def remove_channel(request, code):
 
     return redirect("hc-channels")
 
+@login_required
+def add_sms(request):
+    ctx = {"page": "channels"}
+    return render(request, "integrations/add_sms.html", ctx)
 
 @login_required
 def add_email(request):

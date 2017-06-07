@@ -4,6 +4,7 @@ $(function() {
         webhook: "http://",
         slack: "https://hooks.slack.com/...",
         hipchat: "https://api.hipchat.com/...",
+        sms: "+2547793222",
         pd: "service key"
     }
 
