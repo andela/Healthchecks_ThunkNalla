@@ -86,7 +86,7 @@ class Check(models.Model):
             return self.status
 
         now = timezone.now()
-        if len(self.ping_set.all().order_by('-created')) > 2:
+        if len(self.ping_set.all().order_by('-created')) >= 2:
             reversed_grace = (self.timeout/6)
             pings_to_check = self.ping_set.all().order_by('-created')
             previous_ping = pings_to_check[1].created
