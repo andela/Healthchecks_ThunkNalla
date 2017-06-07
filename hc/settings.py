@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 import warnings
 
+import dj_database_url
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 HOST = "localhost"
@@ -82,16 +84,16 @@ TEST_RUNNER = 'hc.api.tests.CustomRunner'
 
 # Default database engine is SQLite. So one can just check out code,
 # install requirements.txt and do manage.py runserver and it works
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME':   './hc.sqlite',
+if os.environ.get("PLATFORM") == "HEROKU":
+    default = dj_database_url.config(conn_max_age=600)
+    DATABASES = {
+        'default': dj_database_url.config(default=default)
     }
-}
+    STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 # You can switch database engine to postgres or mysql using environment
 # variable 'DB'. Travis CI does this.
-if os.environ.get("DB") == "postgres":
+elif os.environ.get("DB") == "postgres":
     DATABASES = {
         'default': {
             'ENGINE':   'django.db.backends.postgresql',
@@ -101,13 +103,20 @@ if os.environ.get("DB") == "postgres":
         }
     }
 
-if os.environ.get("DB") == "mysql":
+elif os.environ.get("DB") == "mysql":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'USER':     'root',
             'NAME':     'hc',
             'TEST': {'CHARSET': 'UTF8'}
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME':   './hc.sqlite',
         }
     }
 
@@ -158,3 +167,7 @@ if os.path.exists(os.path.join(BASE_DIR, "hc/local_settings.py")):
     from .local_settings import *
 else:
     warnings.warn("local_settings.py not found, using defaults")
+
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'

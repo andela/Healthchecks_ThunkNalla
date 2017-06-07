@@ -11,14 +11,15 @@ class AddPushbulletTestCase(BaseTestCase):
 
     def test_it_shows_instructions(self):
         self.client.login(username="alice@example.org", password="password")
-        r = self.client.get("/integrations/add_pushbullet/")
-        self.assertContains(r, "www.pushbullet.com/authorize", status_code=200)
+        response = self.client.get("/integrations/add_pushbullet/")
+        self.assertContains(response, "www.pushbullet.com/authorize",
+                            status_code=200)
 
     @override_settings(PUSHBULLET_CLIENT_ID=None)
     def test_it_requires_client_id(self):
         self.client.login(username="alice@example.org", password="password")
-        r = self.client.get("/integrations/add_pushbullet/")
-        self.assertEqual(r.status_code, 404)
+        response = self.client.get("/integrations/add_pushbullet/")
+        self.assertEqual(response.status_code, 404)
 
     @patch("hc.front.views.requests.post")
     def test_it_handles_oauth_response(self, mock_post):
@@ -30,9 +31,9 @@ class AddPushbulletTestCase(BaseTestCase):
         url = "/integrations/add_pushbullet/?code=12345678"
 
         self.client.login(username="alice@example.org", password="password")
-        r = self.client.get(url, follow=True)
-        self.assertRedirects(r, "/integrations/")
-        self.assertContains(r, "The Pushbullet integration has been added!")
+        response = self.client.get(url, follow=True)
+        self.assertRedirects(response, "/integrations/")
+        self.assertContains(response, "The Pushbullet integration has been added!")
 
-        ch = Channel.objects.get()
-        self.assertEqual(ch.value, "test-token")
+        query_channel_table = Channel.objects.get()
+        self.assertEqual(query_channel_table.value, "test-token")

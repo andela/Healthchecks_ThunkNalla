@@ -1,10 +1,11 @@
 from datetime import timedelta
 
 from django.utils import timezone
+from mock import patch
+
 from hc.api.management.commands.sendalerts import Command
 from hc.api.models import Check
 from hc.test import BaseTestCase
-from mock import patch
 
 
 class SendAlertsTestCase(BaseTestCase):
@@ -21,22 +22,27 @@ class SendAlertsTestCase(BaseTestCase):
             check.save()
 
         result = Command().handle_many()
-        assert result, "handle_many should return True"
+        self.assertTrue(result, "handle_many should return True")
 
         handled_names = []
         for args, kwargs in mock.call_args_list:
             handled_names.append(args[0].name)
 
-        assert set(names) == set(handled_names)
-        ### The above assert fails. Make it pass
+        self.assertTrue(set(names) == set(handled_names))
+        # The above assert fails. Make it pass
 
     def test_it_handles_grace_period(self):
         check = Check(user=self.alice, status="up")
         # 1 day 30 minutes after ping the check is in grace period:
         check.last_ping = timezone.now() - timedelta(days=1, minutes=30)
         check.save()
-
         # Expect no exceptions--
-        Command().handle_one(check)
+        failed = False
+        try:
+            Command().handle_one(check)
+        except Exception:
+            failed = True
 
-    ### Assert when Command's handle many that when handle_many should return True
+        self.assertFalse(failed)
+
+    # Assert when Command's handle many that when handle_many should return
