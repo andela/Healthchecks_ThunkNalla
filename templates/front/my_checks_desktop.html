@@ -4,6 +4,7 @@
         <th></th>
         <th class="th-name">Name</th>
         <th>Ping URL</th>
+        <th>Priority </th>
         <th class="th-period">
             Period <br />
             <span class="checks-subline">Grace</span>
@@ -51,6 +52,15 @@
                 data-clipboard-text="{{ check.url }}">
                 copy
             </button>
+        </td>
+        <td class="priority" id="check_priority">
+                <select id="priority" data-url="{% url 'hc-update-priority' check.code %}">
+                    <option value="-2" {% if check.get_priority == -2 %}selected {% endif %} >Lowest</option>
+                    <option value="-1" {% if check.get_priority == -1 %}selected {% endif %} >Low</option>
+                    <option value="0" {% if check.get_priority == 0 %}selected {% endif %} >Normal</option>
+                    <option value="1" {% if check.get_priority == 1 %}selected {% endif %} >High</option>
+                    <option value="2"  {% if check.get_priority == 2 %}selected {% endif %} >Emergency</option>
+                </select>
         </td>
         <td class="timeout-cell">
             <span

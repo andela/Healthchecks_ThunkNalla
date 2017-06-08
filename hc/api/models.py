@@ -54,6 +54,9 @@ class Check(models.Model):
     alert_after = models.DateTimeField(null=True, blank=True, editable=False)
     status = models.CharField(max_length=6, choices=STATUSES, default="new")
 
+    # add a priority coulomn
+    priority = models.IntegerField(default=0)
+
     def name_then_code(self):
         if self.name:
             return self.name
@@ -68,6 +71,9 @@ class Check(models.Model):
 
     def email(self):
         return "%s@%s" % (self.code, settings.PING_EMAIL_DOMAIN)
+
+    def get_priority(self):
+        return self.priority
 
     def send_alert(self):
         if self.status not in ("up", "down"):
