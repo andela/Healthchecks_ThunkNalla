@@ -138,7 +138,6 @@ def add_check(request):
 @login_required
 @uuid_or_400
 def update_name(request, code):
-    # import pdb; pdb.set_trace()
     assert request.method == "POST"
 
     check = get_object_or_404(Check, code=code)
@@ -151,7 +150,7 @@ def update_name(request, code):
         check.tags = form.cleaned_data["tags"]
         check.save()
 
-    return my_checks(request)
+    return redirect("hc-checks")
 
 
 @login_required
