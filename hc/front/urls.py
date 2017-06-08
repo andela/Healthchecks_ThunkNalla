@@ -1,5 +1,4 @@
 from django.conf.urls import include, url
-
 from hc.front import views
 
 check_urls = [
@@ -8,6 +7,8 @@ check_urls = [
     url(r'^pause/$', views.pause, name="hc-pause"),
     url(r'^remove/$', views.remove_check, name="hc-remove-check"),
     url(r'^log/$', views.log, name="hc-log"),
+    # add url to view
+    url(r'^priority/$', views.update_priority, name="hc-update-priority"),
 ]
 
 channel_urls = [

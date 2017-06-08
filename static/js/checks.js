@@ -193,5 +193,18 @@ $(function () {
         prompt("Press Ctrl+C to select:", text)
     });
 
+    //callback to select priority
+    $("select#priority").change( function() {
+        let priority_value = $(this).val();
+        let check_url = $(this).data('url')
+        let token = $('input[name="csrfmiddlewaretoken"]').val();
+        
+        //Execute the post request to update the priority of this check
+        $.post( check_url, { priority: priority_value, csrfmiddlewaretoken: token }).done(function( data ) {
+                //Upon success posting, refresh the page to effect the sorting of jobs
+                location.reload(true);
+        });
+
+    })
 
 });

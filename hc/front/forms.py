@@ -1,5 +1,4 @@
 from django import forms
-
 from hc.api.models import Channel
 
 
@@ -45,3 +44,7 @@ class AddWebhookForm(forms.Form):
 
     def get_value(self):
         return "{value_down}\n{value_up}".format(**self.cleaned_data)
+
+
+class UpdatePriorityForm(forms.Form):
+    priority = forms.IntegerField(min_value=-2, max_value=2)

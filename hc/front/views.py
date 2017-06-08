@@ -16,7 +16,7 @@ from django.utils.six.moves.urllib.parse import urlencode
 from hc.api.decorators import uuid_or_400
 from hc.api.models import DEFAULT_GRACE, DEFAULT_TIMEOUT, Channel, Check, Ping
 from hc.front.forms import (AddChannelForm, AddWebhookForm, NameTagsForm,
-                            TimeoutForm)
+                            TimeoutForm, UpdatePriorityForm)
 
 
 # from itertools recipes:
@@ -29,7 +29,9 @@ def pairwise(iterable):
 
 @login_required
 def my_checks(request):
-    q = Check.objects.filter(user=request.team.user).order_by("created")
+
+    # modify this to query oder of checks by priority
+    q = Check.objects.filter(user=request.team.user).order_by("priority").reverse()
     checks = list(q)
 
     counter = Counter()
@@ -136,6 +138,7 @@ def add_check(request):
 @login_required
 @uuid_or_400
 def update_name(request, code):
+    # import pdb; pdb.set_trace()
     assert request.method == "POST"
 
     check = get_object_or_404(Check, code=code)
@@ -148,7 +151,7 @@ def update_name(request, code):
         check.tags = form.cleaned_data["tags"]
         check.save()
 
-    return redirect("hc-checks")
+    return my_checks(request)
 
 
 @login_required
@@ -164,6 +167,24 @@ def update_timeout(request, code):
     if form.is_valid():
         check.timeout = td(seconds=form.cleaned_data["timeout"])
         check.grace = td(seconds=form.cleaned_data["grace"])
+        check.save()
+
+    return redirect("hc-checks")
+
+
+@login_required
+@uuid_or_400
+def update_priority(request, code):
+    # import pdb; pdb.set_trace()
+    assert request.method == "POST"
+
+    check = get_object_or_404(Check, code=code)
+    if check.user != request.team.user:
+        return HttpResponseForbidden()
+
+    form = UpdatePriorityForm(request.POST)
+    if form.is_valid():
+        check.priority = form.cleaned_data["priority"]
         check.save()
 
     return redirect("hc-checks")
@@ -552,3 +573,7 @@ def privacy(request):
 
 def terms(request):
     return render(request, "front/terms.html", {})
+
+
+
+# add view to update checks priority
